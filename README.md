@@ -1,0 +1,2 @@
+# Find help now
+Find Help Now is a single-page website that brings emergency and support contacts together in one place. Each organisation has its own card showing who they are, what help they offer, when they are available (24/7 or weekdays) and a one-tap call button. Visitors can search by keyword (for example "rape", "child", "mental" or "GBV") or filter by type of help to get to the right contact quickly.

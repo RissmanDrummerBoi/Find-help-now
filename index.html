@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="Free, confidential support for survivors of gender-based violence, rape, child abuse and mental health crises in the Eastern Cape, South Africa.">
+<title>Find Help Now - Support Directory</title>
+<style>
+:root {
+  --bg: #2c3e50;
+  --bg-dark: #1a252f;
+  --card: #ffffff;
+  --text: #333333;
+  --text-light: #595959;
+  --yellow: #f1c40f;
+  --red: #c0392b;
+  --red-hover: #a93226;
+  --chip: #34495e;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  line-height: 1.6;
+  padding-bottom: 40px;
+}
+a:focus-visible, button:focus-visible, input:focus-visible {
+  outline: 3px solid var(--yellow);
+  outline-offset: 3px;
+}
+.sr-only {
+  position: absolute; width: 1px; height: 1px; overflow: hidden;
+  clip: rect(0 0 0 0); white-space: nowrap;
+}
+
+/* Quick exit */
+.quick-exit {
+  position: fixed; top: 12px; right: 12px; z-index: 100;
+  background: #000; color: #fff; border: 2px solid #fff;
+  padding: 10px 16px; border-radius: 6px;
+  font: inherit; font-weight: 700; cursor: pointer;
+}
+.quick-exit:hover { background: var(--red); }
+
+header {
+  background: var(--bg-dark);
+  padding: 60px 20px 30px;
+  text-align: center;
+  border-bottom: 5px solid var(--yellow);
+}
+header h1 {
+  color: var(--yellow);
+  font-size: clamp(1.8rem, 6vw, 2.5rem);
+  margin-bottom: 10px;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+}
+header p { color: #ecf0f1; max-width: 800px; margin: 0 auto; font-size: 1.1rem; }
+
+/* Emergency banner */
+.saps-banner {
+  background: var(--red); color: #fff;
+  max-width: 1160px; margin: 30px 20px; padding: 25px;
+  border-radius: 10px; text-align: center;
+  box-shadow: 0 4px 15px rgba(0,0,0,.3);
+}
+@media (min-width: 1200px) { .saps-banner { margin-inline: auto; } }
+.saps-banner h2 { font-size: 1.5rem; margin-bottom: 10px; text-transform: uppercase; }
+.saps-banner p { margin-bottom: 15px; }
+.saps-banner .phone-btn { background: #fff; color: var(--red); font-size: 1.2rem; padding: 14px 24px; margin: 4px; }
+.saps-banner .phone-btn:hover { background: var(--yellow); color: #222; }
+
+/* Search + filters */
+.search-container { max-width: 1200px; margin: 0 auto; padding: 0 20px; text-align: center; }
+.search-container input {
+  width: 100%; max-width: 500px; padding: 15px 20px;
+  border: none; border-radius: 30px; font-size: 1rem;
+  box-shadow: 0 4px 6px rgba(0,0,0,.1);
+}
+.filters { display: flex; flex-wrap: wrap; justify-content: center; gap: 8px; margin-top: 16px; }
+.chip {
+  background: var(--chip); color: #fff; border: 2px solid transparent;
+  padding: 8px 16px; border-radius: 20px; font: inherit; cursor: pointer;
+}
+.chip:hover { border-color: var(--yellow); }
+.chip[aria-pressed="true"] { background: var(--yellow); color: #222; font-weight: 700; }
+#status { color: #bdc3c7; text-align: center; margin-top: 12px; font-size: .95rem; }
+
+/* Grid + cards */
+.grid-container {
+  display: grid; grid-template-columns: repeat(auto-fit, minmax(min(300px, 100%), 1fr));
+  gap: 20px; max-width: 1200px; margin: 24px auto; padding: 0 20px;
+}
+.card {
+  background: var(--card); border-radius: 10px; padding: 25px;
+  box-shadow: 0 4px 15px rgba(0,0,0,.2);
+  display: flex; flex-direction: column;
+}
+.card[hidden] { display: none; }
+.card h3 {
+  color: #2c3e50; font-size: 1.1rem; margin-bottom: 10px;
+  text-transform: uppercase; border-bottom: 2px solid #eee; padding-bottom: 5px;
+}
+.card p { color: var(--text-light); font-size: .95rem; margin-bottom: 20px; flex-grow: 1; }
+.hours {
+  align-self: flex-start; font-size: .8rem; font-weight: 700;
+  background: #e8f6ee; color: #1e6b3a; padding: 2px 10px; border-radius: 12px; margin-bottom: 10px;
+}
+.hours.limited { background: #fdf2d0; color: #7a5b00; }
+
+.phone-numbers { display: flex; flex-direction: column; gap: 8px; }
+.phone-btn {
+  display: inline-block; background: var(--red); color: #fff; text-decoration: none;
+  padding: 12px 15px; border-radius: 5px; font-weight: 700; text-align: center;
+  transition: background-color .2s ease;
+}
+.phone-btn:hover { background: var(--red-hover); }
+
+#no-results { color: #fff; text-align: center; font-size: 1.2rem; grid-column: 1 / -1; padding: 40px; }
+#no-results[hidden] { display: none; }
+
+footer { text-align: center; color: #bdc3c7; margin-top: 40px; padding: 20px; font-size: .9rem; border-top: 1px solid var(--chip); }
+.logos { display: flex; justify-content: center; gap: 20px; margin-bottom: 10px; flex-wrap: wrap; }
+.logo-placeholder { background: var(--chip); padding: 10px 20px; border-radius: 5px; font-weight: 700; color: #fff; }
+
+@media (prefers-reduced-motion: no-preference) {
+  .card { transition: transform .2s ease; }
+  .card:hover { transform: translateY(-5px); }
+}
+</style>
+</head>
+<body>
+
+<button class="quick-exit" id="quickExit" type="button" aria-label="Quick exit: leave this page now">Quick exit</button>
+
+<header>
+  <h1>Find Help Now</h1>
+  <p>If you or anyone you know is experiencing any form of abuse or violence, please contact one of the organisations below for assistance.</p>
+</header>
+
+<section class="saps-banner" aria-labelledby="saps-title">
+  <h2 id="saps-title">In danger right now? Call SAPS</h2>
+  <p>Report all cases of rape, sexual assault or any form of violence.</p>
+  <a href="tel:10111" class="phone-btn">📞 10111</a>
+  <a href="tel:086010111" class="phone-btn">📞 0860 10111</a>
+</section>
+
+<div class="search-container">
+  <label for="searchInput" class="sr-only">Search for help</label>
+  <input type="search" id="searchInput" autocomplete="off" placeholder="Search for help (e.g. 'Rape', 'Child', 'Mental', 'GBV')...">
+  <div class="filters" role="group" aria-label="Filter by type of help">
+    <button class="chip" type="button" data-filter="all" aria-pressed="true">All</button>
+    <button class="chip" type="button" data-filter="247" aria-pressed="false">Open 24/7</button>
+    <button class="chip" type="button" data-filter="gbv" aria-pressed="false">GBV &amp; abuse</button>
+    <button class="chip" type="button" data-filter="child" aria-pressed="false">Children</button>
+    <button class="chip" type="button" data-filter="mental" aria-pressed="false">Mental health</button>
+    <button class="chip" type="button" data-filter="legal" aria-pressed="false">Legal</button>
+  </div>
+  <p id="status" role="status" aria-live="polite"></p>
+</div>
+
+<main class="grid-container" id="cardsContainer">
+
+  <article class="card" data-tags="247 gbv rape sexual hospital medical">
+    <h3>Sinawe Thuthuzela Care Centre</h3>
+    <span class="hours">Open 24/7</span>
+    <p>For rape victims. Nelson Mandela Hospital Complex.</p>
+    <div class="phone-numbers">
+      <a href="tel:0475024400" class="phone-btn">📞 047 502 4400</a>
+    </div>
+  </article>
+
+  <article class="card" data-tags="gbv social worker counselling">
+    <h3>Elomso Africa</h3>
+    <span class="hours limited">Weekdays 8am-4pm</span>
+    <p>Free social workers for victims of GBV.</p>
+    <div class="phone-numbers">
+      <a href="tel:0678922086" class="phone-btn">📞 067 892 2086</a>
+    </div>
+  </article>
+
+  <article class="card" data-tags="legal rights human rights advice">
+    <h3>Jersey Farm Advice &amp; Information Centre</h3>
+    <span class="hours limited">Weekdays 8am-4pm</span>
+    <p>Free legal advice and human rights matters.</p>
+    <div class="phone-numbers">
+      <a href="tel:0784965633" class="phone-btn">📞 078 496 5633</a>
+    </div>
+  </article>
+
+  <article class="card" data-tags="gbv social worker women umtata mthatha">
+    <h3>Umtata Women's Support Centre</h3>
+    <span class="hours limited">Weekdays 8am-4pm</span>
+    <p>Free social workers for victims of GBV.</p>
+    <div class="phone-numbers">
+      <a href="tel:0654470543" class="phone-btn">📞 065 447 0543</a>
+    </div>
+  </article>
+
+  <article class="card" data-tags="247 gbv domestic sexual violence rape online">
+    <h3>TEARS</h3>
+    <span class="hours">Open 24/7</span>
+    <p>Experiencing domestic violence or sexual violence? Free online services.</p>
+    <div class="phone-numbers">
+      <a href="tel:0800083277" class="phone-btn">📞 0800 083 277</a>
+      <a href="tel:*134*7545%23" class="phone-btn">📞 *134*7545#</a>
+    </div>
+  </article>
+
+  <article class="card" data-tags="247 child children kids abuse social worker">
+    <h3>Childline</h3>
+    <span class="hours">Open 24/7</span>
+    <p>Social worker on call.</p>
+    <div class="phone-numbers">
+      <a href="tel:116" class="phone-btn">📞 116</a>
+      <a href="tel:*120*7867%23" class="phone-btn">📞 *120*7867#</a>
+    </div>
+  </article>
+
+  <article class="card" data-tags="247 gbv online command centre">
+    <h3>GBV Command Centre</h3>
+    <span class="hours">Open 24/7</span>
+    <p>For all victims of GBV. Free online services.</p>
+    <div class="phone-numbers">
+      <a href="tel:0800428428" class="phone-btn">📞 0800 428 428</a>
+    </div>
+  </article>
+
+  <article class="card" data-tags="247 mental health depression anxiety suicide referrals">
+    <h3>SADAG</h3>
+    <span class="hours">Open 24/7</span>
+    <p>Free mental health services and referrals.</p>
+    <div class="phone-numbers">
+      <a href="tel:0800567567" class="phone-btn">📞 0800 567 567</a>
+      <a href="tel:0871632030" class="phone-btn">📞 087 163 2030</a>
+    </div>
+  </article>
+
+  <p id="no-results" hidden>No organisations found matching your search.</p>
+</main>
+
+<footer>
+  <div class="logos">
+    <div class="logo-placeholder">Province of the Eastern Cape</div>
+    <div class="logo-placeholder">G20 South Africa 2025</div>
+    <div class="logo-placeholder">Home of Legends</div>
+  </div>
+  <p>Republic of South Africa</p>
+</footer>
+
+<noscript>
+  <p style="color:#fff;text-align:center;padding:10px">Search and filters need JavaScript, but all numbers above still work.</p>
+</noscript>
+
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+  const input = document.getElementById('searchInput');
+  const cards = [...document.querySelectorAll('.card')];
+  const chips = [...document.querySelectorAll('.chip')];
+  const noResults = document.getElementById('no-results');
+  const status = document.getElementById('status');
+  let activeFilter = 'all';
+
+  // Search text and tags are pre-computed once, not on every keystroke
+  const index = cards.map(card => ({
+    card,
+    text: (card.textContent + ' ' + card.dataset.tags).toLowerCase(),
+    tags: card.dataset.tags.split(' ')
+  }));
+
+  function update() {
+    const term = input.value.toLowerCase().trim();
+    let visible = 0;
+    index.forEach(({ card, text, tags }) => {
+      const show = text.includes(term) && (activeFilter === 'all' || tags.includes(activeFilter));
+      card.hidden = !show;
+      if (show) visible++;
+    });
+    noResults.hidden = visible > 0;
+    status.textContent = visible === cards.length ? '' : `Showing ${visible} of ${cards.length} organisations`;
+  }
+
+  input.addEventListener('input', update);
+
+  chips.forEach(chip => chip.addEventListener('click', () => {
+    activeFilter = chip.dataset.filter;
+    chips.forEach(c => c.setAttribute('aria-pressed', String(c === chip)));
+    update();
+  }));
+
+  // Quick exit: replace history entry so Back doesn't return here
+  document.getElementById('quickExit').addEventListener('click', () => {
+    window.open('https://www.google.com', '_blank', 'noopener');
+    window.location.replace('https://www.google.com');
+  });
+  document.addEventListener('keydown', e => {
+    if (e.key === 'Escape') document.getElementById('quickExit').click();
+  });
+});
+</script>
+
+</body>
+</html>
